@@ -1,4 +1,4 @@
-package tavasoli.reza.flutter_hangman;
+package com.scriptstudios.hangman;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

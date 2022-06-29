@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hangman/utilities/constants.dart';
 
 class ActionButton extends StatelessWidget {
-  ActionButton({this.buttonTitle, this.onPress});
+  ActionButton({this.buttonTitle, this.onPress, this.widget});
 
   final Function onPress;
   final String buttonTitle;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,11 @@ class ActionButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       onPressed: onPress,
-      child: Text(
-        buttonTitle,
-        style: kActionButtonTextStyle,
-      ),
+      child: widget ??
+          Text(
+            buttonTitle,
+            style: kActionButtonTextStyle,
+          ),
     );
   }
 }

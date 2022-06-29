@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hangman/utilities/constants.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter_hangman/utilities/score_db.dart';
+import 'package:flutter_hangman/utilities/user_scores.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class ScoreScreen extends StatelessWidget {
-  final query;
+class ScoreScreen extends StatefulWidget {
+  @override
+  _ScoreScreenState createState() => _ScoreScreenState();
+}
 
-  ScoreScreen({this.query});
+class _ScoreScreenState extends State<ScoreScreen> {
+  List<Score> scores;
 
-  List<TableRow> createRow(var query) {
-    query.sort((a, b) => b.toString().compareTo(a.toString()));
+  void getScores() {
+    scores = ScoreDatabase.getScores();
+    scores.sort((s1, s2) {
+      return s1.userScore.compareTo(s2.userScore);
+    });
+    scores = scores.reversed.toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getScores();
+  }
+
+  List<TableRow> createRow(List<Score> scores) {
     List<TableRow> rows = [];
     rows.add(
       TableRow(
@@ -44,16 +62,11 @@ class ScoreScreen extends StatelessWidget {
         ],
       ),
     );
-    print("${query[0]} this is query 0");
-    int numOfRows = query.length;
+    print("${scores[0]} this is query 0");
+    int numOfRows = scores.length;
     List<String> topRanks = ["🥇", "🥈", "🥉"];
     for (var i = 0; i < numOfRows && i < 10; i++) {
-      var row = query[i].toString().split(",");
-      var date = row[1].split(" ")[0].split("-");
-      var scoreDate = formatDate(
-          DateTime(int.parse(date[0]), int.parse(date[1]), int.parse(date[2])),
-          [yy, '-', M, '-', d]);
-
+      var scoreDate = formatDate(scores[i].scoreDate, [d, '-', M, '-', yy]);
       Widget item = TableCell(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
@@ -81,7 +94,7 @@ class ScoreScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
-            '${row[0]}',
+            scores[i].userScore.toString(),
             style: kHighScoreTableRowsStyle,
             textAlign: TextAlign.center,
           ),
@@ -100,9 +113,8 @@ class ScoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: query.length == 0
+        child: scores == null || (scores != null && scores.length == 0)
             ? Stack(
-//                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Center(
                     child: Text(
@@ -119,7 +131,7 @@ class ScoreScreen extends StatelessWidget {
                     child: IconButton(
                       tooltip: 'Home',
                       iconSize: 35,
-                      icon: Icon(MdiIcons.home),
+                      icon: Icon(Icons.arrow_back),
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       onPressed: () {
@@ -140,7 +152,7 @@ class ScoreScreen extends StatelessWidget {
                         child: IconButton(
                           tooltip: 'Home',
                           iconSize: 35,
-                          icon: Icon(MdiIcons.home),
+                          icon: Icon(Icons.arrow_back),
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
                           onPressed: () {
@@ -170,7 +182,7 @@ class ScoreScreen extends StatelessWidget {
                         defaultVerticalAlignment:
                             TableCellVerticalAlignment.middle,
                         textBaseline: TextBaseline.alphabetic,
-                        children: createRow(query),
+                        children: createRow(scores),
                       ),
                     ),
                   ),

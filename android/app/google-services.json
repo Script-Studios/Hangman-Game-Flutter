@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "315245504962",
+    "firebase_url": "https://hang-man-900c6.firebaseio.com",
+    "project_id": "hang-man-900c6",
+    "storage_bucket": "hang-man-900c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315245504962:android:ae0ae09d23822e06b2ce5b",
+        "android_client_info": {
+          "package_name": "com.scriptstudios.hangman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315245504962-mneplr9k6o69p021sg5kova6s8ucv1tn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scriptstudios.hangman",
+            "certificate_hash": "6c5818f336ad82dbc5ba0591e09cc98ee5ff8f31"
+          }
+        },
+        {
+          "client_id": "315245504962-c8qaku0ahogbd2098gkruaa9ia8k1v88.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scriptstudios.hangman",
+            "certificate_hash": "dbfaeff57738ae44d9d3310513f3802a55640153"
+          }
+        },
+        {
+          "client_id": "315245504962-ooeoi7d3qb19lsncsp91skrlm4fr3nt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlWe18G5jSeZBVAmcN-TMio1GJcDfG0as"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315245504962-ooeoi7d3qb19lsncsp91skrlm4fr3nt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

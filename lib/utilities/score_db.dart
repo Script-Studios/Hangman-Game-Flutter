@@ -1,78 +1,51 @@
 import 'dart:async';
+import 'package:flutter_hangman/utilities/appConfiguration.dart';
 import 'package:flutter_hangman/utilities/user_scores.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<Database> openDB() async {
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'scores_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        "CREATE TABLE scores(id INTEGER PRIMARY KEY AUTOINCREMENT, scoreDate TEXT, userScore INTEGER)",
-      );
-    },
-    version: 1,
-  );
-  return database;
-}
+class ScoreDatabase {
+  static SharedPreferences _preferences;
+  static Future<void> init() async {
+    _preferences = await SharedPreferences.getInstance();
+  }
 
-Future<void> insertScore(Score score, final database) async {
-  final Database db = await database;
+  static void insertScore(Score score) async {
+    if (_preferences != null) {
+      List<String> scores = _preferences.getStringList("scores") ?? [];
+      scores.add(score.toString());
+      await _preferences.setStringList("scores", scores);
+      await _preferences.reload();
+      UserAccount.coins += score.userScore;
+      if (UserAccount.me != null) {
+        UserAccount.me.coins += score.userScore;
+        List<Score> _scores = ScoreDatabase.getScores();
+        UserAccount.me.ref.updateData({
+          "scores": List<Map<String, dynamic>>.generate(
+            _scores.length,
+            (i) => _scores[i].toJson(),
+          ),
+        });
+      }
+    } else {
+      await init();
+      insertScore(score);
+    }
+  }
 
-  await db.insert(
-    'scores',
-    score.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.ignore,
-  );
-}
-
-Future<List<Score>> scores(final database) async {
-  // Get a reference to the database.
-  final Database db = await database;
-
-  // Query the table for all The Dogs.
-  final List<Map<String, dynamic>> maps = await db.query('scores');
-
-  // Convert the List<Map<String, dynamic> into a List<Dog>.
-  return List.generate(maps.length, (i) {
-    return Score(
-      id: maps[i]['id'],
-      scoreDate: maps[i]['scoreDate'],
-      userScore: maps[i]['userScore'],
+  static List<Score> getScores() {
+    List<String> scores = _preferences.getStringList("scores") ?? [];
+    return List<Score>.generate(
+      scores.length,
+      (i) => Score.fromString(scores[i]),
     );
-  });
-}
+  }
 
-Future<void> updateScore(Score score, final database) async {
-  // Get a reference to the database.
-  final db = await database;
-
-  // Update the given Dog.
-  await db.update(
-    'scores',
-    score.toMap(),
-    // Ensure that the Dog has a matching id.
-    where: "id = ?",
-    // Pass the Dog's id as a whereArg to prevent SQL injection.
-    whereArgs: [score.id],
-  );
-}
-
-Future<void> deleteScore(int id, final database) async {
-  // Get a reference to the database.
-  final db = await database;
-
-  // Remove the Dog from the database.
-  await db.delete(
-    'scores',
-    // Use a `where` clause to delete a specific dog.
-    where: "id = ?",
-    // Pass the Dog's id as a whereArg to prevent SQL injection.
-    whereArgs: [id],
-  );
-}
-
-void manipulateDatabase(Score scoreObject, final database) async {
-  await insertScore(scoreObject, database);
-  print(await scores(database));
+  static int getTotalScore() {
+    List<Score> scores = ScoreDatabase.getScores();
+    int total = 0;
+    scores.forEach((s) {
+      total += s.userScore;
+    });
+    return total;
+  }
 }

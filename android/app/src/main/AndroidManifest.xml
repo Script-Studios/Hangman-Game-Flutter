@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tavasoli.reza.flutter_hangman">
+    package="com.scriptstudios.hangman">
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -10,6 +11,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Hangman"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-8431155289612675~3446615444"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -1,10 +1,15 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hangman/screens/home_screen.dart';
+import 'package:flutter_hangman/screens/onboard.dart';
+import 'package:flutter_hangman/screens/splash.dart';
 import 'package:flutter_hangman/utilities/constants.dart';
 import 'package:flutter_hangman/screens/score_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize("ca-app-pub-2769425876266383~8918398585");
   return runApp(MyApp());
 }
 
@@ -17,6 +22,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         tooltipTheme: TooltipThemeData(
           decoration: BoxDecoration(
@@ -33,10 +39,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF421b9b),
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'PatrickHand'),
       ),
-      initialRoute: 'homePage',
+      initialRoute: 'splash',
       routes: {
         'homePage': (context) => HomeScreen(),
         'scorePage': (context) => ScoreScreen(),
+        'splash': (context) => SplashScreenPage(),
       },
     );
   }

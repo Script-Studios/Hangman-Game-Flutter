@@ -1,23 +1,47 @@
+import 'package:flutter/material.dart';
+
 class Score {
-  final int id;
-  final String scoreDate;
-  final int userScore;
+  String _id;
+  DateTime _scoreDate;
+  int _userScore;
 
-  Score({this.id, this.scoreDate, this.userScore});
+  Score(
+      {@required String id,
+      @required DateTime scoreDate,
+      @required int userScore}) {
+    this._id = id;
+    this._scoreDate = scoreDate;
+    this._userScore = userScore;
+  }
 
-  Map<String, dynamic> toMap() {
+  Score.fromJson(Map<String, dynamic> data) {
+    this._id = data["id"];
+    this._scoreDate = DateTime.parse(data["scoreDate"]);
+    this._userScore = int.parse(data["userScore"].toString());
+  }
+
+  Score.fromString(String s) {
+    this._userScore = int.parse(s.split(",")[0]);
+    this._scoreDate = DateTime.parse(s.split(",")[1]);
+    this._id = s.split(",")[2];
+  }
+
+  Map<String, dynamic> toJson() {
     return {
-//      'id': id,
-      'scoreDate': scoreDate,
-      'userScore': userScore,
+      'id': _id,
+      'scoreDate': _scoreDate.toIso8601String(),
+      'userScore': _userScore,
     };
   }
 
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
+  String get id => _id;
+
+  DateTime get scoreDate => _scoreDate;
+
+  int get userScore => _userScore;
 
   @override
   String toString() {
-    return '$userScore,$scoreDate,$id';
+    return '$_userScore,${_scoreDate.toIso8601String()},$_id';
   }
 }

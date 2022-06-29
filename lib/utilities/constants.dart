@@ -129,3 +129,18 @@ const kDialogButtonColor = Color(0x00000000);
 
 const kWordCounterTextStyle =
     TextStyle(fontSize: 29.5, color: Colors.white, fontWeight: FontWeight.w900);
+
+Map<ADType, String> adUnitId = {
+  ADType.Banner: "ca-app-pub-8431155289612675/3342781463",
+  ADType.Reward: "ca-app-pub-8431155289612675/2315806104"
+};
+
+enum ADType { Banner, Reward }
+
+Color defaultThemeColor = Color(0xFF421b9b);
+
+String privacyPolicyUrl =
+    "https://docs.google.com/document/d/1ui6q8eWxFww7uJwD2wIZTrY7lCsu2SceuGm0mLSJ1u4/edit?usp=sharing";
+
+String playStoreUrl =
+    "https://play.google.com/store/apps/details?id=com.scriptstudios.hangman";
